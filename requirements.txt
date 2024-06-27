@@ -1,0 +1,13 @@
+celery==5.4.0
+click==8.1.7
+docxtpl==0.17.0
+GitPython==3.1.43
+inquirerpy==0.3.4
+ipython==8.25.0
+Jinja2==3.1.4
+loguru==0.7.2
+pytest==8.2.2
+rich==13.7.1
+Sphinx==7.3.7
+sphinx-sitemap==2.6.0
+toml==0.10.2

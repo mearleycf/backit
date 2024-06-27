@@ -1,0 +1,75 @@
+# Global default settings
+[global]
+debug_mode = false
+verbose_mode = true
+
+# Default backup settings
+[backup.defaults]
+source_directories = ["/Users/mikeearley/.config", "/Users/mikeearley/scripts"]
+exclude_directories = ["/Users/mikeearley/scripts/.venv"]
+backup_directory = "/Users/mikeearley/backup"
+number_of_copies_to_keep = 2
+
+# Default logging settings
+[logging.defaults]
+log_directory = "/Users/mikeearley/backup_logs"
+archive_directory = "/Users/mikeearley/backup_logs/archive"
+color_setup = { info = "<fg #03edf9>", error = "<fg #fc28a8>" }
+custom_levels = { custom_msg = { no = 27, color = "<fg #4e00ff>", icon = "🚀" } }
+
+# Default Git settings
+[git.defaults]
+remote_repository = "https://github.com/mearleycf/backup.git"
+default_branch = "main"
+remote_name = "origin"
+
+# Default Celery settings
+[celery.defaults]
+broker_url = "amqp://guest@localhost//"
+result_backend = "rpc://"
+frequency = "weekly"
+schedule = { day_of_week = 0, hour = 8, minute = 30 }
+
+# Additional miscellaneous settings
+[misc.defaults]
+lock_file_location = "/Users/mikeearley/.config/backit/locks/lockfile.lock"
+timeout_value = 120  # Timeout for processes in seconds
+
+# fish_config backup settings
+[backup.job.fish_config]
+    [backup.job.fish_config.backup]
+    source_directories = ["/Users/mikeearley/.config/fish"]
+    backup_directory = "/Users/mikearley/backup/fish_config"
+    
+
+    [backup.job.fish_config.logging]
+    log_directory = "/Users/mikeearley/backup_logs/fish_config"
+    archive_directory = "/Users/mikeearley/backup_logs/fish_config/archive"
+
+    [backup.job.fish_config.git]
+    remote_repository = "https://github.com/mikeearley/backup_fish_config.git"
+
+    [backup.job.fish_config.celery]
+    frequency = "daily"
+    schedule = { day_of_week = 0, hour = 8, minute = 30 }
+
+# screenshots backup settings
+[backup.job.screenshots]
+    [backup.job.screenshots.backup]
+    source_directories = ["/Users/mikeearley/screenshots/"]
+    backup_directory = "/Users/mikearley/backup/screenshots"
+
+    [backup.job.screenshots.logging]
+    log_directory = "/Users/mikeearley/backup_logs/screenshots"
+    archive_directory = "/Users/mikeearley/backup_logs/screenshots/archive"
+    
+    [backup.job.screenshots.git]
+    remote_repository = "https://github.com/mikeearley/backup_screenshots.git"
+
+    [backup.job.screenshots.celery]
+    frequency = "daily"
+    schedule = { day_of_week = 0, hour = 8, minute = 30 }
+
+    [backup.job.screenshots.misc]
+    timeout_value = 600
+
