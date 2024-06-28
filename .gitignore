@@ -162,4 +162,8 @@ cython_debug/
 #.idea/
 
 # vs code project specific settings
+.vscode/
 .vscode/settings.json
+
+# local s3cmd configuration
+.s3cfg
