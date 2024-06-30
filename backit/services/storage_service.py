@@ -1,18 +1,33 @@
-from abc import ABC, abstractmethod
+class ObjectStorageService:
+    """
+    Interface for interactions with object storage services.
+    """
 
-class StorageService(ABC):
-    """ Abstract class for storage services """
-    @abstractmethod
     def upload_file(self, file_path, destination):
-        """ Upload a file to the storage service """
-        pass
+        raise NotImplementedError
 
-    @abstractmethod
-    def download_file(self, source, destination):
-        """ Download a file from the storage service """
-        pass
+    def download_file(self, file_path, destination):
+        raise NotImplementedError
 
-    @abstractmethod
     def delete_file(self, file_path):
-        """ Delete a file from the storage service """
-        pass
+        raise NotImplementedError
+
+class VersionControlService:
+    """
+    Interface for interactions with version control systems.
+    """
+
+    def commit_changes(self, message):
+        raise NotImplementedError
+
+    def push_changes(self):
+        raise NotImplementedError
+
+    def pull_changes(self):
+        raise NotImplementedError
+
+    def create_branch(self, branch_name):
+        raise NotImplementedError
+
+    def merge_branch(self, source_branch, target_branch):
+        raise NotImplementedError
