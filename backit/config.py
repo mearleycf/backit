@@ -3,10 +3,11 @@
 import toml
 from toml.decoder import TomlDecodeError
 from dataclasses import dataclass, field
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 @dataclass
 class BackupConfig:
+    """Data class to store backup configuration settings."""
     source_directories: List[str]
     exclude_directories: List[str]
     backup_directory: str
@@ -14,6 +15,7 @@ class BackupConfig:
 
 @dataclass
 class LoggingConfig:
+    """Data class to store logging configuration settings."""
     log_directory: str
     archive_directory: str
     color_setup: Dict[str, str]
@@ -21,12 +23,14 @@ class LoggingConfig:
 
 @dataclass
 class GitConfig:
+    """Data class to store Git configuration settings."""
     remote_repository: str
     default_branch: str
     remote_name: str
 
 @dataclass
 class CeleryConfig:
+    """Data class to store Celery configuration settings."""
     broker_url: str
     result_backend: str
     frequency: str
@@ -34,11 +38,13 @@ class CeleryConfig:
 
 @dataclass
 class MiscConfig:
+    """Data class to store miscellaneous configuration settings."""
     lock_file_location: str
     timeout_value: int
 
 @dataclass
 class GlobalConfig:
+    """Data class to store all global configuration settings."""
     debug_mode: bool
     verbose_mode: bool
     backup: BackupConfig
@@ -47,8 +53,29 @@ class GlobalConfig:
     celery: CeleryConfig
     misc: MiscConfig
 
-class Config: 
-    def __init__(self, config_path="config.toml"):
+class Config:
+    """
+    A class to manage and parse configuration settings from a TOML file.
+
+    Args:
+        config_path (str): The path to the configuration file.
+
+    Raises:
+        FileNotFoundError: If the configuration file does not exist.
+        ValueError: If there are issues parsing the configuration file.
+    """
+
+    def __init__(self, config_path: str = "config.toml"):
+        """
+        Initialize the Config class and load the configuration data from a TOML file.
+
+        :param config_path: The path to the configuration file.
+        :type config_path: str
+
+        Raises:
+            FileNotFoundError: If the configuration file does not exist.
+            ValueError: If there are issues parsing the configuration file.
+        """
         try:
             self.config_data = toml.load(config_path)
         except FileNotFoundError:
@@ -60,12 +87,28 @@ class Config:
         except KeyError:
             raise ValueError("Missing 'global' section in config file.")
 
-    def _validate_config(self, config_section, expected_keys):
+    def _validate_config(self, config_section: Dict, expected_keys: List[str]) -> None:
+        """
+        Validate the presence of all required keys in a configuration section.
+        Args:
+            config_section (Dict): The configuration section to validate.
+            expected_keys (List[str]): A list of keys expected to be in the configuration section.
+        Raises:
+            ValueError: If any expected keys are missing.
+        """
         missing_keys = [key for key in expected_keys if key not in config_section]
         if missing_keys:
             raise ValueError(f"Missing keys in config: {missing_keys}")
+        return None
 
-    def _parse_config(self, config_section):
+    def _parse_config(self, config_section: Dict) -> GlobalConfig:
+        """
+        Parse the global configuration section and instantiate data classes.
+        Args:
+            config_section (Dict): The 'global' configuration section from the TOML file.
+        Returns:
+            GlobalConfig: An instance of the GlobalConfig dataclass with all configurations loaded.
+        """
         expected_keys = ["debug_mode", "verbose_mode", "backup.defaults", "logging.defaults", "git.defaults", "celery.defaults", "misc.defaults"]
         self._validate_config(config_section, expected_keys)
 
@@ -78,47 +121,3 @@ class Config:
             celery=CeleryConfig(**config_section["celery.defaults"]),
             misc=MiscConfig(**config_section["misc.defaults"])
         )
-    
-    def get_backup_config(self, job_name=None):
-        if job_name:
-            job_config = self.config_data.get(f"backup.job.{job_name}.backup", {})
-            return {**self.global_config.backup.__dict__, **job_config.get('backup', {})}
-        return self.global_config.backup
-    
-    def get_logging_config(self, job_name=None):
-        if job_name:
-            job_config = self.config_data.get(f"backup.job.{job_name}.logging", {})
-            return {**self.global_config.logging.__dict__, **job_config.get('logging', {})}
-        return self.global_config.logging
-    
-    def get_git_config(self, job_name=None):
-        if job_name:
-            job_config = self.config_data.get(f"backup.job.{job_name}.git", {})
-            return {**self.global_config.git.__dict__, **job_config.get('git', {})}
-        return self.global_config.git
-
-    def get_celery_config(self, job_name=None):
-        if job_name:
-            job_config = self.config_data.get(f"backup.job.{job_name}.celery", {})
-            return {**self.global_config.celery.__dict__, **job_config.get('celery', {})}
-        return self.global_config.celery
-    
-    def get_misc_config(self, job_name=None):
-        if job_name:
-            job_config = self.config_data.get(f"backup.job.{job_name}.misc", {})
-            return {**self.global_config.misc.__dict__, **job_config.get('misc', {})}
-        return self.global_config.misc
-    
-"""
-example usage:
-config = Config()
-print(config.get_backup_config("fish_config")) # get specific job config
-print(config.get_logging_config()) # get default logging config
-
-# If you want to catch exceptions
-try:
-    config = Config()
-except Exception as e:
-    print(f"Failed to load configuration: {e}")
-    # Appropriate error handling here, like exit the program or revert to defaults
-"""
