@@ -2,19 +2,34 @@
 [global]
 debug_mode = false
 verbose_mode = true
+timestamp = "%Y-%m-%d %H:%M:%S"
 
 # Default backup settings
 [backup.defaults]
 source_directories = ["/Users/mikeearley/.config", "/Users/mikeearley/scripts"]
 exclude_directories = ["/Users/mikeearley/scripts/.venv"]
 backup_directory = "/Users/mikeearley/backup"
+backup_prefix = "backup"
 number_of_copies_to_keep = 2
 
 # Default logging settings
 [logging.defaults]
-log_directory = "/Users/mikeearley/backup_logs"
-archive_directory = "/Users/mikeearley/backup_logs/archive"
-color_setup = { info = "<fg #03edf9>", error = "<fg #fc28a8>" }
+log_directory = "/Users/username/.config/backit/logs"
+archive_directory = "/Users/username/.config/backit/logs/archive"
+log_prefix = "backup"
+log_retention_period = "1 week"
+log_level = "INFO"
+timestamp = "%Y-%m-%d %H:%M:%S:%f"
+log_format = "<level> <icon> | <timestamp> | <message>"
+color_setup = [
+    {level = "TRACE", foreground = "<##03edf9>", background = "", style = "<bold>", icon = "🔍"},
+    {level = "DEBUG", foreground = "<blue>", background = "", style = "<bold>", icon = "🐞"},
+    {level = "INFO", foreground = "", background = "", style = "<bold>", icon = "ℹ️"},
+    {level = "SUCCESS", foreground = "<green>", background = "<LIGHT-YELLOW>", style = "<bold>", icon = "✅"},
+    {level = "WARNING", foreground = "<yellow>", background = "", style = "<bold>", icon = "⚠️"},
+    {level = "ERROR", foreground = "<red>", background = "", style = "<bold>", icon = "❌"},
+    {level = "CRITICAL", foreground = "", background = "<RED>", style = "<bold>", icon = "🔥"},
+]
 custom_levels = { custom_msg = { no = 27, color = "<fg #4e00ff>", icon = "🚀" } }
 
 # Default Git settings

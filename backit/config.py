@@ -18,8 +18,10 @@ class LoggingConfig:
     """Data class to store logging configuration settings."""
     log_directory: str
     archive_directory: str
-    color_setup: Dict[str, str]
-    custom_levels: Dict[str, Dict[str, str]]
+    log_retention_period: str
+    log_level: str
+    color_setup: Dict[str, str, str, str, str]
+    custom_levels: Dict[str, Dict[str, str, str, str, str]]
 
 @dataclass
 class GitConfig:
