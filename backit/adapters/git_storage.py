@@ -1,4 +1,5 @@
 from backit.services.storage_service import StorageService
+from backit.utils.file_utils import ensure_dir_exists
 from git import Repo, GitCommandError
 import os
 import shutil
@@ -22,8 +23,7 @@ class GitStorage(StorageService):
         Configures the repository by ensuring the repository directory exists,
         initializing the repository if necessary, and setting up the remote URL.
         """
-        if not os.path.exists(self.backup_repo_path):
-            os.makedirs(self.backup_repo_path)
+        ensure_dir_exists(self.backup_repo_path)
 
         try:
             repo = Repo(self.backup_repo_path)
