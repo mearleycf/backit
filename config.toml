@@ -1,5 +1,5 @@
-# Global default settings
-[global]
+# General default settings
+[general_settings]
 debug_mode = false
 verbose_mode = true
 timestamp = "%Y-%m-%d %H:%M:%S"
